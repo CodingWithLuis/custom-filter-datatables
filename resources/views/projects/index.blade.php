@@ -18,7 +18,7 @@
                         </div>
                         <div class="col-md-3">
                             <select class="form-control status_id" name="status_id">
-                                <option>Seleccione</option>
+                                <option value="">Seleccione</option>
                                 @foreach($statuses as $status)
                                 <option value="{{$status->id}}">{{$status->name}}</option>
                                 @endforeach
@@ -56,12 +56,19 @@
         $(".end_date").flatpickr();
         $(".status_id").select2();
 
-        $('.projects_table').DataTable({
+        const table = $('.projects_table').DataTable({
             processing: true,
             serverSide: true,
             responsive: true,
             searching: false,
-            ajax: "{{route('projects.index')}}",
+            ajax: {
+                url: "{{route('projects.datatable')}}",
+                data: function(d) {
+                    d.status_id = $('.status_id').val(),
+                        d.start_date = $('.start_date').val(),
+                        d.end_date = $('.end_date').val()
+                },
+            },
             dataType: 'json',
             type: "POST",
             columns: [{
@@ -85,6 +92,10 @@
                     name: 'user.name',
                 },
             ],
+        })
+
+        $('#filtrar').click(function() {
+            table.draw()
         })
     })
 </script>

@@ -22,4 +22,5 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/projects/datatable', [ProjectController::class, 'datatable'])->name('projects.datatable');
 Route::resource('projects', ProjectController::class)->only('index');
